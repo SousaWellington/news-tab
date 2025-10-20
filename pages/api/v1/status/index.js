@@ -1,14 +1,30 @@
 import database from "infra/database.js";
 
 async function status(req, res) {
-  console.log("GET - /api/v1/status");
+  const updateAt = new Date().toISOString();
+  
+  const databaseVersionResult = await database.query("SHOW SERVER_VERSION;")
+  const databaseVersionValue = databaseVersionResult.rows[0].server_version;
 
-  const result = await database.query("SELECT 1 + 1 as sum;");
-  console.log(result.rows);
+  const databaseMaxConnectionsResult = await database.query("SHOW MAX_CONNECTIONS;")
+  const databaseMaxConnectionsValue = Number(databaseMaxConnectionsResult.rows[0].max_connections);
+
+  const databaseName = process.env.POSTGRES_DB
+  const databaseOpenedConnectionsResult = await database.query({
+    text: "SELECT count(*)::int FROM pg_stat_activity WHERE datname = $1;",
+    values: [databaseName]
+  });
+  const databaseOpenedConnectionsValue = databaseOpenedConnectionsResult.rows[0].count;
 
   res.status(200).json({
-    status: "OK",
-    date: new Date(),
+    updated_at: updateAt,
+    dependencies: {
+      database:{
+        version: databaseVersionValue,
+        max_connections: databaseMaxConnectionsValue,
+        opened_connections: databaseOpenedConnectionsValue
+      }
+    }
   });
 }
 export default status;
