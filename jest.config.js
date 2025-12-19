@@ -1,8 +1,14 @@
 const nextJest = require("next/jest");
+const dotenv = require("dotenv");
 
-const createJestConfig = nextJest();
+dotenv.config({ path: ".env.development" });
+
+const createJestConfig = nextJest({
+  dir: ".",
+});
 const jestConfig = createJestConfig({
   moduleDirectories: ["node_modules", "<rootDir>"],
+  watchPathIgnorePatterns: ["<rootDir>/infra/data"],
 });
 
 module.exports = jestConfig;
