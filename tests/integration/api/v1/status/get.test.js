@@ -1,4 +1,9 @@
+import orchestrator from "tests/orchestrator.js";
 const baseUrl = "http://localhost:3000";
+
+beforeAll(async()=>{
+  await orchestrator.waitForAllServices()
+})
 
 test("GET - /api/v1/status shold return 200", async () => {
   const response = await fetch(`${baseUrl}/api/v1/status`);
