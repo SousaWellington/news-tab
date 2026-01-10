@@ -1,5 +1,11 @@
 const baseUrl = "http://localhost:3000";
 import database from "infra/database.js";
+import orchestrator from "tests/orchestrator";
+
+beforeAll(async()=>{
+  await orchestrator.waitForAllServices()
+  await database.query("drop schema public cascade; create schema public");
+})
 
 test("POST - /api/v1/migrations shold return 200", async () => {
   // const migrations = await database.query("SELECT to_regclass('public.pgmigrations');")
