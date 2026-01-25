@@ -1,10 +1,9 @@
 import { Client } from "pg";
 
 async function query(queryObject) {
-
   let client;
   try {
-    client = await getNewClient()
+    client = await getNewClient();
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
@@ -14,10 +13,9 @@ async function query(queryObject) {
   }
 }
 
-
 export default {
   query,
-  getNewClient
+  getNewClient,
 };
 
 async function getNewClient() {
@@ -30,7 +28,7 @@ async function getNewClient() {
     ssl: getSSLValues(),
   });
   await client.connect();
-  return client
+  return client;
 }
 
 function getSSLValues() {

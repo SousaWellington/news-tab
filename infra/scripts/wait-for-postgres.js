@@ -6,7 +6,7 @@ function checkPostgres() {
   function handleReturn(error, stdout) {
     if (stdout.search("accepting connections") === -1) {
       process.stdout.write(".");
-      setTimeout (checkPostgres, 500);
+      setTimeout(checkPostgres, 500);
       return;
     }
 
@@ -14,5 +14,7 @@ function checkPostgres() {
   }
 }
 
-process.stdout.write("\n\n🔴 Postgres está se preparando para aceitar conexões");
+process.stdout.write(
+  "\n\n🔴 Postgres está se preparando para aceitar conexões"
+);
 checkPostgres();
