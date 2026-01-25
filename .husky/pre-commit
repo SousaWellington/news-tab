@@ -1,0 +1,5 @@
+echo "Check for linting errors before commit ..."
+npm run lint:eslint:check || (echo 'Linting founded errors. Fix before commiting' && exit 1)
+
+
+echo 'Done'
