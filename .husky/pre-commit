@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# pega arquivos staged (ACM) e ignora arquivos binários/comuns desnecessários
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -vE '\.(png|jpg|jpeg|gif|zip|lock)$')
+
+# se não houver arquivos, sai
+if [ -z "$FILES" ]; then
+  exit 0
+fi
+
+echo "🔍 Checking secrets..."
+
+# roda o secretlint nos arquivos filtrados
+npx secretlint $FILES
+STATUS=$?
+
+# se detectar secret, bloqueia commit
+if [ $STATUS -ne 0 ]; then
+  exit 1
+fi
